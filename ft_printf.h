@@ -25,14 +25,15 @@ void	ft_putstr_fd(char *str, int fd);
 char	*ft_itoa(int n);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_gethexa(unsigned long nbr, int up);
-int		ft_write_c(char value);
-int		ft_write_s(char *value);
-int		ft_write_d(int value);
-int		ft_write_x(int value);
-int		ft_write_xup(int value);
-int		ft_write_p(unsigned long value);
-int		ft_write_u(unsigned int value, int *len);
-int		ft_process(const char *str, va_list *params);
+int		ft_write_c(char value, int fd);
+int		ft_write_s(char *value, int fd);
+int		ft_write_d(int value, int fd);
+int		ft_write_x(int value, int fd);
+int		ft_write_xup(int value, int fd);
+int		ft_write_p(unsigned long value, int fd);
+int		ft_write_u(unsigned int value, int *len, int fd);
+int		ft_process(const char *str, va_list *params, int fd);
+int		ft_printf_fd(const char *str, int fd, ...);
 int		ft_printf(const char *str, ...);
 
 #endif

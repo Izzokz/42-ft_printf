@@ -12,10 +12,18 @@
 
 #include "ft_printf.h"
 
+int	ft_printf_fd(const char *str, int fd, ...)
+{
+	va_list	params;
+
+	va_start(params, fd);
+	return (ft_process(str, &params, fd));
+}
+
 int	ft_printf(const char *str, ...)
 {
 	va_list	params;
 
 	va_start(params, str);
-	return (ft_process(str, &params));
+	return (ft_process(str, &params, 1));
 }
