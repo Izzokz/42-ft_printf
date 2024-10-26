@@ -17,7 +17,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdint.h>
-# include <limits.h>
 
 char	*ft_strdup(const char *str);
 size_t	ft_strlen(const char *str);

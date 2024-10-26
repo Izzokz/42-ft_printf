@@ -64,7 +64,6 @@ char	*ft_gethexa(unsigned long nbr, int up)
 	str = ft_calloc(len + 1, sizeof(char));
 	if (!str)
 		return (NULL);
-	str[len] = '\0';
 	recursive_core(&str, nbr, --len, up);
 	return (str);
 }
