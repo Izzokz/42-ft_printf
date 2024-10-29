@@ -12,26 +12,26 @@
 
 #include "ft_printf.h"
 
-static int	do_write(const char *str, size_t i, va_list *params, int fd)
+static int	do_write(const char c, va_list *params, int fd)
 {
 	int	init;
 
 	init = 1;
-	if (str[i] == 'c')
+	if (c == 'c')
 		return (ft_write_c((char)va_arg(*params, int), fd));
-	if (str[i] == 's')
+	if (c == 's')
 		return (ft_write_s(va_arg(*params, char *), fd));
-	if (str[i] == 'i' || str[i] == 'd')
+	if (c == 'i' || c == 'd')
 		return (ft_write_d(va_arg(*params, int), fd));
-	if (str[i] == 'x')
+	if (c == 'x')
 		return (ft_write_x(va_arg(*params, int), 0, fd));
-	if (str[i] == 'X')
+	if (c == 'X')
 		return (ft_write_x(va_arg(*params, int), 1, fd));
-	if (str[i] == 'p')
+	if (c == 'p')
 		return (ft_write_p(va_arg(*params, unsigned long), fd));
-	if (str[i] == 'u')
+	if (c == 'u')
 		return (ft_write_u(va_arg(*params, unsigned int), &init, fd));
-	if (str[i] == '%')
+	if (c == '%')
 		return (write(fd, "%", 1));
 	return (0);
 }
@@ -48,7 +48,7 @@ int	ft_process(const char *str, va_list *params, int fd)
 	{
 		if (str[i] == '%')
 		{
-			temp_len = do_write(str, ++i, params, fd);
+			temp_len = do_write(str[++i], params, fd);
 			if (!temp_len)
 			{
 				len = -1;
