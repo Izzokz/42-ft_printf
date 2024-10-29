@@ -33,7 +33,7 @@ int	ft_write_x(int value, int up, int fd)
 	int		len;
 
 	str = NULL;
-	str = ft_gethexa((unsigned int)value, up);
+	str = ft_getbase((unsigned int)value, 16, up);
 	if (!str)
 		return (0);
 	ft_putstr_fd(str, fd);
@@ -67,7 +67,7 @@ int	ft_write_p(unsigned long value, int fd)
 		return (5);
 	}
 	str = NULL;
-	str = ft_gethexa(value, 0);
+	str = ft_getbase(value, 16, 0);
 	if (!str)
 		return (0);
 	ft_putstr_fd("0x", fd);

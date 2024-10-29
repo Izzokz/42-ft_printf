@@ -1,7 +1,8 @@
 NAME = libftprintf.a
-SRC = ft_gethexa.c \
+SRC = ft_getbase.c \
 	ft_write_d.c \
 	ft_write_s.c \
+	ft_write_b.c \
 	ft_process.c \
 	ft_printf.c \
 	ft_calloc.c \
