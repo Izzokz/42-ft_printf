@@ -24,9 +24,9 @@ static int	do_write(const char *str, size_t i, va_list *params, int fd)
 	if (str[i] == 'i' || str[i] == 'd')
 		return (ft_write_d(va_arg(*params, int), fd));
 	if (str[i] == 'x')
-		return (ft_write_x(va_arg(*params, int), fd));
+		return (ft_write_x(va_arg(*params, int), 0, fd));
 	if (str[i] == 'X')
-		return (ft_write_xup(va_arg(*params, int), fd));
+		return (ft_write_x(va_arg(*params, int), 1, fd));
 	if (str[i] == 'p')
 		return (ft_write_p(va_arg(*params, unsigned long), fd));
 	if (str[i] == 'u')
@@ -49,15 +49,15 @@ int	ft_process(const char *str, va_list *params, int fd)
 		if (str[i] == '%')
 		{
 			temp_len = do_write(str, ++i, params, fd);
+			if (!temp_len)
+			{
+				len = -1;
+				break ;
+			}
 			len += temp_len;
 		}
 		else
-		{
-			if (str[i] == '%' && str[i + 1] == '%')
-				i++;
-			ft_putchar_fd(str[i], fd);
-			len++;
-		}
+			len += write(fd, &str[i], 1);
 	}
 	va_end(*params);
 	return (len);

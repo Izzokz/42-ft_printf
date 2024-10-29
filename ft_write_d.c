@@ -27,28 +27,13 @@ int	ft_write_d(int value, int fd)
 	return (len);
 }
 
-int	ft_write_x(int value, int fd)
+int	ft_write_x(int value, int up, int fd)
 {
 	char	*str;
 	int		len;
 
 	str = NULL;
-	str = ft_gethexa((unsigned int)value, 0);
-	if (!str)
-		return (0);
-	ft_putstr_fd(str, fd);
-	len = ft_strlen(str);
-	free(str);
-	return (len);
-}
-
-int	ft_write_xup(int value, int fd)
-{
-	char	*str;
-	int		len;
-
-	str = NULL;
-	str = ft_gethexa((unsigned int)value, 1);
+	str = ft_gethexa((unsigned int)value, up);
 	if (!str)
 		return (0);
 	ft_putstr_fd(str, fd);
@@ -86,8 +71,7 @@ int	ft_write_p(unsigned long value, int fd)
 	if (!str)
 		return (0);
 	ft_putstr_fd("0x", fd);
-	len = 2;
-	len += ft_strlen(str);
+	len = ft_strlen(str) + 2;
 	ft_putstr_fd(str, fd);
 	free(str);
 	return (len);
