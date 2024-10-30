@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdint.h>
 
+long	ft_pow(int number, int exp);
 char	*ft_strdup(const char *str);
 size_t	ft_strlen(const char *str);
 void	ft_putchar_fd(char c, int fd);
