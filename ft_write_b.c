@@ -28,9 +28,9 @@ static int	ft_conv(const char type, const char c)
 		if (c >= '0' && c <= '9')
 			conv = c - '0';
 		if (c >= 'a' && c <= 'z')
-			conv = c - 'a';
+			conv = c - 'a' + 10;
 		if (c >= 'A' && c <= 'Z')
-			conv = c - 'A';
+			conv = c - 'A' + 10;
 	}
 	if (type == 'n')
 		conv = (c >= '0' && c <= '9');
