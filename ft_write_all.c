@@ -36,7 +36,9 @@ static int	points_to_pointer(void *ptr, int double_check)
 	if (!double_check || *check_ptr == NULL)
 		return (*check_ptr != NULL);
 	check_double_ptr = (void ***)ptr;
-	return (**check_double_ptr != NULL);
+	if (check_double_ptr && *check_double_ptr)
+		return (**check_double_ptr != NULL);
+	return (0);
 }
 
 static int	call_of_duty(void *origin, char c, char *sep)
@@ -48,19 +50,21 @@ static int	call_of_duty(void *origin, char c, char *sep)
 	len = 0;
 	if (!origin)
 		return (0);
+	if (c != 's' && c != 'p')
+		return (call_all(origin, c, sep));
 	j = -1;
 	cast_ptr = (void **)origin;
 	while (cast_ptr[++j] != NULL)
 	{
-		if (c == 'p' && points_to_pointer(cast_ptr[j], 0)
-			&& points_to_pointer(cast_ptr[j], 1)
-			&& points_to_pointer((void ***)cast_ptr[j], 1))
-			len += call_all(cast_ptr[j], c, sep);
-		else if (points_to_pointer(cast_ptr[j], 0)
+		if (points_to_pointer(cast_ptr[j], 0)
 			&& !points_to_pointer(cast_ptr[j], 1))
 			len += call_of_duty(cast_ptr[j], c, sep);
 		else
+		{
 			len += call_all(cast_ptr[j], c, sep);
+			if (cast_ptr[j + 1] != NULL)
+				len += ft_write_s(sep);
+		}
 	}
 	return (len);
 }
@@ -73,21 +77,22 @@ static char	*get_sep(const char *str, size_t *i)
 
 	sep = NULL;
 	j = *i;
-	if (str[++j] != '[')
+	if (str[j] != '[')
 		return (sep);
 	while (str[++j] && str[j] != ']')
 		;
-	if (str[j] != ']')
+	if (str[j] != ']' || str[j - 1] == '[')
 		return (NULL);
-	*i += 2;
+	*i += 1;
 	sep = ft_calloc(j - *i + 1, sizeof(char));
 	k = 0;
 	while (*i < j)
 	{
-		sep[*i] = str[k];
+		sep[k] = str[*i];
 		*i += 1;
 		k++;
 	}
+	*i += 1;
 	return (sep);
 }
 
@@ -107,9 +112,9 @@ int	ft_write_all(va_list *params, const char *str, size_t *i)
 	*i += 1;
 	sep = get_sep(str, i);
 	if (recursive)
-		len += call_all(va_arg(*params, void *), str[*i], sep);
-	else
 		len += call_of_duty(va_arg(*params, void *), str[*i], sep);
+	else
+		len += call_all(va_arg(*params, void *), str[*i], sep);
 	if (sep)
 	{
 		free(sep);
