@@ -42,18 +42,17 @@ int	ft_write_x(int value, int up)
 	return (len);
 }
 
-int	ft_write_u(unsigned int value, int *len)
+int	ft_write_u(unsigned int value)
 {
 	char	c;
+	int		len;
 
+	len = 1;
 	if (value > 9)
-	{
-		*len += 1;
-		ft_write_u(value / 10, len);
-	}
+		len += ft_write_u(value / 10);
 	c = (value % 10) + '0';
 	write(g_fd, &c, 1);
-	return (*len);
+	return (len);
 }
 
 int	ft_write_p(unsigned long value)

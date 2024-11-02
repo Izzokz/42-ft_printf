@@ -12,18 +12,16 @@
 
 #include "ft_printf.h"
 
-static int	call_all(void *ptr, const char *str, size_t *i, char *sep)
+static int	call_all(void *ptr, char c, char *sep)
 {
-	int	len;
-
-	if (str[*i] == 'd' || str[*i] == 'i')
-		return (ft_process_all_d((int *)ptr, str, i, sep));
-	if (str[*i] == 's')
-		return (ft_process_all_s((char **)ptr, str, i, sep));
-	if (str[*i] == 'u')
-		return (ft_process_all_u((unsigned int *)ptr, str, i, sep));
-	if (str[*i] == 'p')
-		return (ft_process_all_p(ptr, str, i, sep));
+	if (c == 'd' || c == 'i')
+		return (ft_process_all_d((int *)ptr, sep));
+	if (c == 's')
+		return (ft_process_all_s((char **)ptr, sep));
+	if (c == 'u')
+		return (ft_process_all_u((unsigned int *)ptr, sep));
+	if (c == 'p')
+		return (ft_process_all_p((unsigned long *)ptr, sep));
 	return (0);
 }
 
@@ -41,7 +39,7 @@ static int	points_to_pointer(void *ptr, int double_check)
 	return (**check_double_ptr != NULL);
 }
 
-static int	call_of_duty(void *origin, const char *str, size_t *i, char *sep)
+static int	call_of_duty(void *origin, char c, char *sep)
 {
 	int		j;
 	int		len;
@@ -54,11 +52,15 @@ static int	call_of_duty(void *origin, const char *str, size_t *i, char *sep)
 	cast_ptr = (void **)origin;
 	while (cast_ptr[++j] != NULL)
 	{
-		if (points_to_pointer(cast_ptr[j], 0)
+		if (c == 'p' && points_to_pointer(cast_ptr[j], 0)
+			&& points_to_pointer(cast_ptr[j], 1)
+			&& points_to_pointer((void ***)cast_ptr[j], 1))
+			len += call_all(cast_ptr[j], c, sep);
+		else if (points_to_pointer(cast_ptr[j], 0)
 			&& !points_to_pointer(cast_ptr[j], 1))
-			len += call_of_duty(cast_ptr[j], str, i, sep);
+			len += call_of_duty(cast_ptr[j], c, sep);
 		else
-			len += call_all(cast_ptr[j], str, i, sep);
+			len += call_all(cast_ptr[j], c, sep);
 	}
 	return (len);
 }
@@ -76,7 +78,7 @@ static char	*get_sep(const char *str, size_t *i)
 	while (str[++j] && str[j] != ']')
 		;
 	if (str[j] != ']')
-		return (-1);
+		return (NULL);
 	*i += 2;
 	sep = ft_calloc(j - *i + 1, sizeof(char));
 	k = 0;
@@ -105,8 +107,9 @@ int	ft_write_all(va_list *params, const char *str, size_t *i)
 	*i += 1;
 	sep = get_sep(str, i);
 	if (recursive)
-		len += call_all(va_arg(*params, void *), str, i, sep);
-	len += call_of_duty(va_arg(*params, void *), str, i, sep);
+		len += call_all(va_arg(*params, void *), str[*i], sep);
+	else
+		len += call_of_duty(va_arg(*params, void *), str[*i], sep);
 	if (sep)
 	{
 		free(sep);

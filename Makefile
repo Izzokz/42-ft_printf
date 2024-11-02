@@ -11,7 +11,9 @@ SRC = ft_getbase.c \
 	ft_strlen.c \
 	ft_itoa.c \
 	ft_strdup.c \
-	ft_pow.c
+	ft_pow.c \
+	ft_write_all.c \
+	ft_process_all.c
 OBJ = $(SRC:.c=.o)
 
 CCA = cc -Wall -Wextra -Werror -g3

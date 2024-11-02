@@ -14,9 +14,6 @@
 
 static int	do_write(const char *str, size_t *i, va_list *params)
 {
-	int	init;
-
-	init = 1;
 	if (str[*i] == '*')
 		return (ft_write_all(params, str, i));
 	if (str[*i] == 'b' || str[*i] == 'B')
@@ -32,7 +29,7 @@ static int	do_write(const char *str, size_t *i, va_list *params)
 	if (str[*i] == 'p')
 		return (ft_write_p(va_arg(*params, unsigned long)));
 	if (str[*i] == 'u')
-		return (ft_write_u(va_arg(*params, unsigned int), &init));
+		return (ft_write_u(va_arg(*params, unsigned int)));
 	if (str[*i] == '%')
 		return (write(g_fd, "%", 1));
 	return (write(g_fd, "%", 1));

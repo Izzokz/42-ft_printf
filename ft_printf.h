@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <stdint.h>
 
-const int	g_fd; // Set once in ft_printf.c and never change
+static int	g_fd; // Set once in ft_printf.c and never change
 
 long	ft_pow(int number, int exp);
 char	*ft_strdup(const char *str);
@@ -34,8 +34,13 @@ int		ft_write_s(char *value);
 int		ft_write_d(int value);
 int		ft_write_x(int value, int up);
 int		ft_write_p(unsigned long value);
-int		ft_write_u(unsigned int value, int *len);
+int		ft_write_u(unsigned int value);
+int		ft_process_all_s(char **chain, char *sep);
+int		ft_process_all_d(int *array, char *sep);
+int		ft_process_all_u(unsigned int *array, char *sep);
+int		ft_process_all_p(unsigned long *ptr, char *sep);
 int		ft_process(const char *str, va_list *params);
+int		ft_write_all(va_list *params, const char *str, size_t *i);
 int		ft_printf_fd(const char *str, int fd, ...);
 int		ft_printf(const char *str, ...);
 
