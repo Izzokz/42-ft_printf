@@ -109,7 +109,7 @@ static int	ft_getdec(const char *str, int base)
 If the user does not use ft_printf in a good way
 the result may differ
 */
-int	ft_write_b(va_list *params, const char *str, size_t *i, int fd)
+int	ft_write_b(va_list *params, const char *str, size_t *i)
 {
 	size_t	len;
 	char	*p_str;
@@ -130,7 +130,7 @@ int	ft_write_b(va_list *params, const char *str, size_t *i, int fd)
 		p_str = ft_getbase(from, base, c == 'B');
 	if (p_str)
 	{
-		ft_putstr_fd(p_str, fd);
+		ft_putstr_fd(p_str, g_fd);
 		len = ft_strlen(p_str);
 		free(p_str);
 		str = NULL;

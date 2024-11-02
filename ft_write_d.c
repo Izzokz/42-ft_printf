@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	ft_write_d(int value, int fd)
+int	ft_write_d(int value)
 {
 	char	*str;
 	int		len;
@@ -20,14 +20,14 @@ int	ft_write_d(int value, int fd)
 	str = ft_itoa(value);
 	if (!str)
 		return (0);
-	ft_putstr_fd(str, fd);
+	ft_putstr_fd(str, g_fd);
 	len = ft_strlen(str);
 	if (str)
 		free(str);
 	return (len);
 }
 
-int	ft_write_x(int value, int up, int fd)
+int	ft_write_x(int value, int up)
 {
 	char	*str;
 	int		len;
@@ -36,43 +36,43 @@ int	ft_write_x(int value, int up, int fd)
 	str = ft_getbase((unsigned int)value, 16, up);
 	if (!str)
 		return (0);
-	ft_putstr_fd(str, fd);
+	ft_putstr_fd(str, g_fd);
 	len = ft_strlen(str);
 	free(str);
 	return (len);
 }
 
-int	ft_write_u(unsigned int value, int *len, int fd)
+int	ft_write_u(unsigned int value, int *len)
 {
 	char	c;
 
 	if (value > 9)
 	{
 		*len += 1;
-		ft_write_u(value / 10, len, fd);
+		ft_write_u(value / 10, len);
 	}
 	c = (value % 10) + '0';
-	write(fd, &c, 1);
+	write(g_fd, &c, 1);
 	return (*len);
 }
 
-int	ft_write_p(unsigned long value, int fd)
+int	ft_write_p(unsigned long value)
 {
 	int		len;
 	char	*str;
 
 	if (!value)
 	{
-		ft_putstr_fd("(nil)", fd);
+		ft_putstr_fd("(nil)", g_fd);
 		return (5);
 	}
 	str = NULL;
 	str = ft_getbase(value, 16, 0);
 	if (!str)
 		return (0);
-	ft_putstr_fd("0x", fd);
+	ft_putstr_fd("0x", g_fd);
 	len = ft_strlen(str) + 2;
-	ft_putstr_fd(str, fd);
+	ft_putstr_fd(str, g_fd);
 	free(str);
 	return (len);
 }

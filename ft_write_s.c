@@ -12,19 +12,19 @@
 
 #include "ft_printf.h"
 
-int	ft_write_c(char value, int fd)
+int	ft_write_c(char value)
 {
-	ft_putchar_fd(value, fd);
+	ft_putchar_fd(value, g_fd);
 	return (1);
 }
 
-int	ft_write_s(char *value, int fd)
+int	ft_write_s(char *value)
 {
 	if (!value)
 	{
-		ft_putstr_fd("(null)", fd);
+		ft_putstr_fd("(null)", g_fd);
 		return (6);
 	}
-	ft_putstr_fd(value, fd);
+	ft_putstr_fd(value, g_fd);
 	return (ft_strlen(value));
 }

@@ -3,3 +3,4 @@ a.out
 ft_printf.test
 .gitignore
 *.o
+*.txt
