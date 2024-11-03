@@ -36,13 +36,13 @@ static int	call_of_duty(void **origin, int depth, char c, char *sep)
 	j = -1;
 	if (depth > 1)
 		while (origin[++j] != NULL)
+		{
 			len += call_of_duty(origin[j], depth - 1, c, sep);
+			if (origin[j + 1] != NULL && sep)
+				len += ft_write_s(sep);
+		}
 	else
-	{
 		len += call_all(origin, c, sep);
-		if (origin[j + 1] != NULL && sep)
-			len += ft_write_s(sep);
-	}
 	return (len);
 }
 
