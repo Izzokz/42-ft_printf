@@ -12,6 +12,8 @@
 
 #include "ft_printf.h"
 
+static int	g_fd; // Read Only
+
 static int	do_write(const char *str, size_t *i, va_list *params)
 {
 	if (str[*i] == '*')

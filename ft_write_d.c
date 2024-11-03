@@ -12,6 +12,8 @@
 
 #include "ft_printf.h"
 
+static int	g_fd; // Read Only
+
 int	ft_write_d(int value)
 {
 	char	*str;

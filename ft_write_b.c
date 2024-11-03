@@ -12,6 +12,8 @@
 
 #include "ft_printf.h"
 
+static int	g_fd; // Read Only
+
 /*
 This function works like a converter from an alnum character
 to an integer if <type> == 'c', acts like isdigit if

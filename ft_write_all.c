@@ -25,46 +25,23 @@ static int	call_all(void *ptr, char c, char *sep)
 	return (0);
 }
 
-static int	points_to_pointer(void *ptr, int double_check)
-{
-	void	**check_ptr;
-	void	***check_double_ptr;
-
-	if (!ptr)
-		return (0);
-	check_ptr = (void **)ptr;
-	if (!double_check || *check_ptr == NULL)
-		return (*check_ptr != NULL);
-	check_double_ptr = (void ***)ptr;
-	if (check_double_ptr && *check_double_ptr)
-		return (**check_double_ptr != NULL);
-	return (0);
-}
-
-static int	call_of_duty(void *origin, char c, char *sep)
+static int	call_of_duty(void **origin, int depth, char c, char *sep)
 {
 	int		j;
 	int		len;
-	void	**cast_ptr;
 
 	len = 0;
-	if (!origin)
+	if (!origin || depth == 0)
 		return (0);
-	if (c != 's' && c != 'p')
-		return (call_all(origin, c, sep));
 	j = -1;
-	cast_ptr = (void **)origin;
-	while (cast_ptr[++j] != NULL)
+	if (depth > 1)
+		while (origin[++j] != NULL)
+			len += call_of_duty(origin[j], depth - 1, c, sep);
+	else
 	{
-		if (points_to_pointer(cast_ptr[j], 0)
-			&& !points_to_pointer(cast_ptr[j], 1))
-			len += call_of_duty(cast_ptr[j], c, sep);
-		else
-		{
-			len += call_all(cast_ptr[j], c, sep);
-			if (cast_ptr[j + 1] != NULL)
-				len += ft_write_s(sep);
-		}
+		len += call_all(origin, c, sep);
+		if (origin[j + 1] != NULL && sep)
+			len += ft_write_s(sep);
 	}
 	return (len);
 }
@@ -96,25 +73,41 @@ static char	*get_sep(const char *str, size_t *i)
 	return (sep);
 }
 
+static int	get_rdepth(const char *str, size_t *i)
+{
+	++(*i);
+	if (str[*i] == '.')
+	{
+		if (str[*i + 1] >= '0' && str[*i + 1] <= '9')
+		{
+			*i += 2;
+			return (str[*i - 1] - '0' + 1);
+		}
+		else
+			return (-1);
+	}
+	return (0);
+}
+
 int	ft_write_all(va_list *params, const char *str, size_t *i)
 {
 	size_t	len;
 	char	*sep;
 	int		recursive;
+	void	*ptr;
 
 	len = 0;
-	recursive = 0;
-	if (str[*i + 1] == '.')
-	{
-		recursive += 1;
-		*i += 1;
-	}
-	*i += 1;
+	recursive = get_rdepth(str, i);
+	if (recursive == -1)
+		return (0);
 	sep = get_sep(str, i);
+	ptr = va_arg(*params, void *);
+	if (!ptr)
+		return (0);
 	if (recursive)
-		len += call_of_duty(va_arg(*params, void *), str[*i], sep);
+		len += call_of_duty(ptr, recursive - 1, str[*i], sep);
 	else
-		len += call_all(va_arg(*params, void *), str[*i], sep);
+		len += call_all(ptr, str[*i], sep);
 	if (sep)
 	{
 		free(sep);

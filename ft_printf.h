@@ -18,8 +18,6 @@
 # include <stdlib.h>
 # include <stdint.h>
 
-static int	g_fd; // Set once in ft_printf.c and never change
-
 long	ft_pow(int number, int exp);
 char	*ft_strdup(const char *str);
 size_t	ft_strlen(const char *str);
