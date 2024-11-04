@@ -25,7 +25,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	if (!alloc)
 		return (NULL);
 	i = -1;
-	while (++i < nmemb)
+	while (++i < nmemb * size)
 		*(unsigned char *)(alloc + i) = '\0';
 	return (alloc);
 }
