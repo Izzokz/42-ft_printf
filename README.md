@@ -25,34 +25,45 @@
   - ```%B<base>``` will print an ```unsigned long int``` to another base with uppercase
   - **NOTE : base cannot be lower than 2 nor higher than 36**
 - Flag : If a specific base is entered between '[' and ']', it will print from a ```char *``` to another base
-  - **NOTE : the specific base cannot be lower than 2 nor higher than 36. It won't work if there is nothing in the dedicated space**
+  - **NOTE : it won't work if there is something else than a number between 2 and 36 in the dedicated space**
 - Examples :
   - ```ft_printf("%b2", 10) >>> "1010"```
   - ```ft_printf("%b02", 10) >>> "1010"```
-  - ```ft_printf("%b[10]2", "10") >>> "1010"```
+  - ```ft_printf("%b[08]2", "12") >>> "1010"```
   - ```ft_printf("%B36", INT_MAX) >>> "ZIK0ZJ"```
-  - ```ft_printf("%b[10]36", itoa(INT_MAX)) >>> "zik0zj"```
+  - ```ft_printf("%b[2]36", "1111111111111111111111111111111") >>> "zik0zj"```
+- Not to Do :
+  - ```ft_printf("%b[10]2", 10)```
+  - ```ft_printf("%b[010]2", "10")```
+  - ```ft_printf("%B[]10", "0")```
+  - ```ft_printf("%b[6]36", "6")```
 
 ### Special Flag
 ```%*```
 
-- Behaviour : Prints every variable in an array. The array must be NULL terminated.
+- Behaviour : Prints every variable in an array.
+- **NOTE : the array must be NULL terminated.**
 #### Special Flag of Special Flag
 ```.```
 
-- Behaviour : After ```%*```, means that it will print every variable of every array pointed out by a pointer, recursively.
+- Behaviour : After ```%*```, means that it will print every variable of every array contained in the source array, recursively.
 - Parameter : As the C language can't go through pointers recursively without SIGSEGV, it needs a depth parameter as its light in the dark cave of dereferencing.
- - **Note : depth can't be 0 or higher than 9**
+ - **NOTE : depth can't be 0 or higher than 9**
+ - **NOTE : every array has to be NULL terminated**
+ - **NOTE : using it with pointers of arrays will result in Conditional Jump**
 
 ```[separator]```
 
 - Behaviour : Will prints separator between each print. Won't work if separator is empty or if the last character of separator is '['.
-  - **Note : It has to be the last Flag of Flag**
+  - **NOTE : It has to be the last Flag of Flag**
 
 - Examples :
- - ```ft_printf("%*s", {"Hello", "Hohoho", "Hi", NULL}) >>> "HelloHohohoHi"```
- - ```ft_printf("%*i", {1, 2, 3, 4, 5, '\0'}) >>> "12345"```
- - ```ft_printf("%*[ ]s", {"My", "name", "is", "Izzokz", NULL}) >>> "My name is Izzokz"```
- - ```ft_printf("%*.3[::]i", {{{1, 7, 0}, {2, 6, 0}}, {{3, 5, 0}, NULL}}) >>> "1::7::2::6::3::5"```
- - ```ft_printf("%*.2[, ]p", {{{1, 7, 0}, {2, 6, 0}}, {{3, 5, 0}, NULL}}) >>> "0xfff, 0xaaa, 0x111"```
+  - ```ft_printf("%*s", {"Hello", "Hohoho", "Hi", NULL}) >>> "HelloHohohoHi"```
+  - ```ft_printf("%*i", {1, 2, 3, 4, 5, '\0'}) >>> "12345"```
+  - ```ft_printf("%*[ ]s", {"My", "name", "is", "Izzokz", NULL}) >>> "My name is Izzokz"```
+  - ```ft_printf("%*.4[::]i", {{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}) >>> "1::7::2::6::3::5"```
+  - ```ft_printf("%*.3[, ]p", {{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}) >>> "0xfff, 0xaaa, 0x111"```
+- Not to Do :
+  - ```ft_printf("%*.3[, ]p", {{{1, 7}, {2, 6}}, {{3, 5}}})```
+  - ```ft_printf("%*.2[\n]i", &array)```
 - **NOTE : I made it easier in that way. If your pointer looks like this ```int ***arr``` or ```unsigned int **arr```, you will use or ```%*.3i``` or ```%*.2u```. With ```%s``` or ```%p```, you will decrease the parameter of the flag of flag ```.``` by one (```%*.4s``` for ```char *****str``` or ```%*.2p``` for ```unsigned int ***arr```).**
