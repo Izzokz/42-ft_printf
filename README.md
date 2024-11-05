@@ -61,9 +61,9 @@
   - ```ft_printf("%*s", {"Hello", "Hohoho", "Hi", NULL}) >>> "HelloHohohoHi"```
   - ```ft_printf("%*i", {1, 2, 3, 4, 5, '\0'}) >>> "12345"```
   - ```ft_printf("%*[ ]s", {"My", "name", "is", "Izzokz", NULL}) >>> "My name is Izzokz"```
-  - ```ft_printf("%*.4[::]i", {{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}) >>> "1::7::2::6::3::5"```
-  - ```ft_printf("%*.3[, ]p", {{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}) >>> "0xfff, 0xaaa, 0x111"```
+  - ```ft_printf("%*.4[::]i", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL}) >>> "1::7::2::6::3::5"```
+  - ```ft_printf("%*.3[, ]p", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL}) >>> "0xfff, 0xaaa, 0x111"```
 - Not to Do :
-  - ```ft_printf("%*.3[, ]p", {{{1, 7}, {2, 6}}, {{3, 5}}})```
+  - ```ft_printf("%*.3[, ]p", {{{{1, 7}, {2, 6}}, {{3, 5}}}})```
   - ```ft_printf("%*.2[\n]i", &array)```
 - **NOTE : I made it easier in that way. If your pointer looks like this ```int ***arr``` or ```unsigned int **arr```, you will use or ```%*.3i``` or ```%*.2u```. With ```%s``` or ```%p```, you will decrease the parameter of the flag of flag ```.``` by one (```%*.4s``` for ```char *****str``` or ```%*.2p``` for ```unsigned int ***arr```).**
