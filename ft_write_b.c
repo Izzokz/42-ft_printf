@@ -95,7 +95,7 @@ static int	ft_getdec(const char *str, int base)
 	len = ft_strlen(str);
 	dec = 0;
 	weight = -1;
-	while (str[--len])
+	while (--len >= 0)
 	{
 		c_to_i = ft_conv('c', str[len]);
 		if (base <= c_to_i || c_to_i < 0)
