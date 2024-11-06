@@ -46,8 +46,8 @@
   - ```ft_printf("%_0", izzokz_likes_deathstep())``` prints TRUE
   - ```ft_printf("%_0", 3 + 1 == 5)``` prints FALSE
 - ```%_1``` :
-  - ```ft_printf("%_1", 1)``` prints <span style="color:green">**TRUE**</span>
-  - ```ft_printf("%_1", izzokz_is_sane())``` prints <span style="color:red">**FALSE**</span>
+  - ```ft_printf("%_1", 1)``` prints **${{\color{green}\Huge{\textsf{TRUE}}}}\$**
+  - ```ft_printf("%_1", izzokz_is_sane())``` prints **${{\color{red}\Huge{\textsf{FALSE}}}}\$**
   - **NOTE : Wait... WHAT??**
 
 ### Special Flag
