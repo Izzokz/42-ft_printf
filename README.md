@@ -38,6 +38,18 @@
   - ```ft_printf("%B[]10", "0")```
   - ```ft_printf("%b[6]36", "6")```
 
+```%_0, %_1```
+
+- Data Type : ```int```
+- Behaviour : Prints a Boolean
+- ```%_0``` :
+  - ```ft_printf("%_0", izzokz_likes_deathstep())``` prints TRUE
+  - ```ft_printf("%_0", 3 + 1 == 5)``` prints FALSE
+- ```%_1``` :
+  - ```ft_printf("%_1", 1)``` prints <span style="color:green">**TRUE**</span>
+  - ```ft_printf("%_1", izzokz_is_sane())``` prints <span style="color:red">**FALSE**</span>
+  - **NOTE : Wait... WHAT??**
+
 ### Special Flag
 ```%*```
 
