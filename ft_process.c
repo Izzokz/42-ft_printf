@@ -14,10 +14,28 @@
 
 static int	g_fd; // Read Only
 
+static int	is_flag(const char *flag, const char *str, size_t *i)
+{
+	size_t	k;
+	size_t	init;
+
+	init = *i;
+	--(*i);
+	k = -1;
+	while (str[++(*i)] == flag[++k])
+		;
+	if (!flag[k] && str[--(*i)] == flag[k - 1])
+		return (1);
+	*i = init;
+	return (0);
+}
+
 static int	do_write(const char *str, size_t *i, va_list *params)
 {
 	if (str[*i] == '*')
 		return (ft_write_all(params, str, i));
+	if (is_flag("_0", str, i) || is_flag("_1", str, i))
+		return (ft_write_bool(va_arg(*params, int), str[*i] - '0'));
 	if (str[*i] == 'b' || str[*i] == 'B')
 		return (ft_write_b(params, str, i));
 	if (str[*i] == 'c')

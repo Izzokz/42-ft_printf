@@ -77,3 +77,16 @@ int	ft_write_p(unsigned long value)
 	free(str);
 	return (len);
 }
+
+int	ft_write_bool(int value, int colored)
+{
+	if (value)
+	{
+		if (colored)
+			return (ft_write_s("\x1B[1m\x1B[32mTRUE\x1B[0m\x1B[m"));
+		return (ft_write_s("TRUE"));
+	}
+	if (colored)
+		return (ft_write_s("\x1B[1m\x1B[31mFALSE\x1B[0m\x1B[m"));
+	return (ft_write_s("FALSE"));
+}

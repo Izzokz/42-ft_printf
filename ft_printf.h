@@ -33,6 +33,7 @@ int		ft_write_d(int value);
 int		ft_write_x(int value, int up);
 int		ft_write_p(unsigned long value);
 int		ft_write_u(unsigned int value);
+int		ft_write_bool(int value, int colored);
 int		ft_process_all_s(char **chain, char *sep);
 int		ft_process_all_d(int *array, char *sep);
 int		ft_process_all_u(unsigned int *array, char *sep);
