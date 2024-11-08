@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kzhen-cl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/10 11:25:36 by kzhen-cl          #+#    #+#             */
-/*   Updated: 2024/10/10 11:25:37 by kzhen-cl         ###   ########.fr       */
+/*   Created: 2024/08/09 19:58:33 by kzhen-cl          #+#    #+#             */
+/*   Updated: 2024/10/07 17:34:09 by kzhen-cl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-char	*ft_strdup(const char *src)
+size_t	ft_strlen(const char *str)
 {
-	char	*dest;
-	int		len;
-	int		index;
+	size_t	len;
 
-	len = ft_strlen(src);
-	dest = malloc(sizeof(char) * len + 1);
-	if (!dest)
-		return (dest);
-	dest[len] = '\0';
-	index = 0;
-	while (index < len)
-	{
-		dest[index] = src[index];
-		index++;
-	}
-	return (dest);
+	len = -1;
+	while (str[++len])
+		;
+	return (len);
 }

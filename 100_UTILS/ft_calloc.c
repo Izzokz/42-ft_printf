@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pow.c                                           :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kzhen-cl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 12:59:14 by kzhen-cl          #+#    #+#             */
-/*   Updated: 2024/10/30 12:59:16 by kzhen-cl         ###   ########.fr       */
+/*   Created: 2024/10/10 10:02:26 by kzhen-cl          #+#    #+#             */
+/*   Updated: 2024/10/10 10:02:27 by kzhen-cl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-long	ft_pow(int number, int exp)
-{
-	long	value;
+#include "../ft_printf.h"
 
-	if (exp == 0)
-		return (1);
-	value = number;
-	while (--exp)
-		value *= number;
-	return (value);
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*alloc;
+	size_t	i;
+
+	if ((long)nmemb == 0 || (long)size == 0)
+		return (malloc(0));
+	if (size && nmemb > SIZE_MAX / size)
+		return (NULL);
+	alloc = malloc(nmemb * size);
+	if (!alloc)
+		return (NULL);
+	i = -1;
+	while (++i < nmemb * size)
+		*(unsigned char *)(alloc + i) = '\0';
+	return (alloc);
 }

@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kzhen-cl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 15:13:07 by kzhen-cl          #+#    #+#             */
-/*   Updated: 2024/10/14 15:13:08 by kzhen-cl         ###   ########.fr       */
+/*   Created: 2024/10/14 16:20:43 by kzhen-cl          #+#    #+#             */
+/*   Updated: 2024/10/14 16:20:44 by kzhen-cl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
-	write(fd, &c, 1);
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		ft_putchar_fd(s[i], fd);
 }
