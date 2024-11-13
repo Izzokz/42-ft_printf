@@ -12,26 +12,30 @@
 
 #include "../ft_printf.h"
 
-static int	g_fd; // Set once in ft_printf.c and never change
-
 int	ft_printf_fd(const char *str, int fd, ...)
 {
-	va_list	params;
+	t_params	*pa;
 
 	if (!str || fd < 0)
 		return (-1);
-	g_fd = fd;
-	va_start(params, fd);
-	return (ft_process(str, &params));
+	pa = ft_calloc(1, sizeof(t_params));
+	pa->str = str;
+	pa->fd = fd;
+	pa->i = -1;
+	va_start(pa->args, fd);
+	return (ft_process(pa));
 }
 
 int	ft_printf(const char *str, ...)
 {
-	va_list	params;
+	t_params	*pa;
 
 	if (!str)
 		return (-1);
-	g_fd = 1;
-	va_start(params, str);
-	return (ft_process(str, &params));
+	pa = ft_calloc(1, sizeof(t_params));
+	pa->str = str;
+	pa->fd = 1;
+	pa->i = -1;
+	va_start(pa->args, str);
+	return (ft_process(pa));
 }

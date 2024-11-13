@@ -12,9 +12,7 @@
 
 #include "../ft_printf.h"
 
-static int	g_fd; // Read Only
-
-int	ft_write_d(int value)
+int	ft_write_d(int value, int fd)
 {
 	char	*str;
 	int		len;
@@ -22,14 +20,14 @@ int	ft_write_d(int value)
 	str = ft_itoa(value);
 	if (!str)
 		return (0);
-	ft_putstr_fd(str, g_fd);
+	ft_putstr_fd(str, fd);
 	len = ft_strlen(str);
 	if (str)
 		free(str);
 	return (len);
 }
 
-int	ft_write_x(int value, int up)
+int	ft_write_x(int value, int up, int fd)
 {
 	char	*str;
 	int		len;
@@ -38,55 +36,55 @@ int	ft_write_x(int value, int up)
 	str = ft_getbase((unsigned int)value, 16, up);
 	if (!str)
 		return (0);
-	ft_putstr_fd(str, g_fd);
+	ft_putstr_fd(str, fd);
 	len = ft_strlen(str);
 	free(str);
 	return (len);
 }
 
-int	ft_write_u(unsigned int value)
+int	ft_write_u(unsigned int value, int fd)
 {
 	char	c;
 	int		len;
 
 	len = 1;
 	if (value > 9)
-		len += ft_write_u(value / 10);
+		len += ft_write_u(value / 10, fd);
 	c = (value % 10) + '0';
-	write(g_fd, &c, 1);
+	write(fd, &c, 1);
 	return (len);
 }
 
-int	ft_write_p(unsigned long value)
+int	ft_write_p(unsigned long value, int fd)
 {
 	int		len;
 	char	*str;
 
 	if (!value)
 	{
-		ft_putstr_fd("(nil)", g_fd);
+		ft_putstr_fd("(nil)", fd);
 		return (5);
 	}
 	str = NULL;
 	str = ft_getbase(value, 16, 0);
 	if (!str)
 		return (0);
-	ft_putstr_fd("0x", g_fd);
+	ft_putstr_fd("0x", fd);
 	len = ft_strlen(str) + 2;
-	ft_putstr_fd(str, g_fd);
+	ft_putstr_fd(str, fd);
 	free(str);
 	return (len);
 }
 
-int	ft_write_bool(int value, int colored)
+int	ft_write_bool(int value, int colored, int fd)
 {
 	if (value)
 	{
 		if (colored)
-			return (ft_write_s("\x1B[1m\x1B[32mTRUE\x1B[0m\x1B[m"));
-		return (ft_write_s("TRUE"));
+			return (ft_write_s("\x1B[1m\x1B[32mTRUE\x1B[0m\x1B[m", fd));
+		return (ft_write_s("TRUE", fd));
 	}
 	if (colored)
-		return (ft_write_s("\x1B[1m\x1B[31mFALSE\x1B[0m\x1B[m"));
-	return (ft_write_s("FALSE"));
+		return (ft_write_s("\x1B[1m\x1B[31mFALSE\x1B[0m\x1B[m", fd));
+	return (ft_write_s("FALSE", fd));
 }

@@ -12,73 +12,72 @@
 
 #include "../ft_printf.h"
 
-static int	g_fd; // Read Only
-
-static int	is_flag(const char *flag, const char *str, size_t *i)
+static int	is_flag(const char *flag, t_params *pa)
 {
 	size_t	k;
 	size_t	init;
 
-	init = *i;
-	--(*i);
+	init = pa->i;
+	--(pa->i);
 	k = -1;
-	while (str[++(*i)] == flag[++k])
+	while (pa->str[++(pa->i)] == flag[++k])
 		;
-	if (!flag[k] && str[--(*i)] == flag[k - 1])
+	if (!flag[k] && pa->str[--(pa->i)] == flag[k - 1])
 		return (1);
-	*i = init;
+	pa->i = init;
 	return (0);
 }
 
-static int	do_write(const char *str, size_t *i, va_list *params)
+static int	do_write(t_params *pa)
 {
-	if (str[*i] == '*')
-		return (ft_write_all(params, str, i));
-	if (is_flag("_0", str, i) || is_flag("_1", str, i))
-		return (ft_write_bool(va_arg(*params, int), str[*i] - '0'));
-	if (str[*i] == 'b' || str[*i] == 'B')
-		return (ft_write_b(params, str, i));
-	if (str[*i] == 'c')
-		return (ft_write_c((char)va_arg(*params, int)));
-	if (str[*i] == 's')
-		return (ft_write_s(va_arg(*params, char *)));
-	if (str[*i] == 'i' || str[*i] == 'd')
-		return (ft_write_d(va_arg(*params, int)));
-	if (str[*i] == 'x' || str[*i] == 'X')
-		return (ft_write_x(va_arg(*params, int), str[*i] == 'X'));
-	if (str[*i] == 'p')
-		return (ft_write_p(va_arg(*params, unsigned long)));
-	if (str[*i] == 'u')
-		return (ft_write_u(va_arg(*params, unsigned int)));
-	if (str[*i] == '%')
-		return (write(g_fd, "%", 1));
-	return (write(g_fd, "%", 1));
+	if (pa->str[pa->i] == '*')
+		return (ft_write_all(pa));
+	if (is_flag("_0", pa))
+		return (ft_write_bool(va_arg(pa->args, int), 0, pa->fd));
+	if (is_flag("_1", pa))
+		return (ft_write_bool(va_arg(pa->args, int), 1, pa->fd));
+	if (pa->str[pa->i] == 'b' || pa->str[pa->i] == 'B')
+		return (ft_write_b(pa));
+	if (pa->str[pa->i] == 'c')
+		return (ft_write_c((char)va_arg(pa->args, int), pa->fd));
+	if (pa->str[pa->i] == 's')
+		return (ft_write_s(va_arg(pa->args, char *), pa->fd));
+	if (pa->str[pa->i] == 'i' || pa->str[pa->i] == 'd')
+		return (ft_write_d(va_arg(pa->args, int), pa->fd));
+	if (pa->str[pa->i] == 'x')
+		return (ft_write_x(va_arg(pa->args, int), 0, pa->fd));
+	if (pa->str[pa->i] == 'X')
+		return (ft_write_x(va_arg(pa->args, int), 1, pa->fd));
+	if (pa->str[pa->i] == 'p')
+		return (ft_write_p(va_arg(pa->args, unsigned long), pa->fd));
+	if (pa->str[pa->i] == 'u')
+		return (ft_write_u(va_arg(pa->args, unsigned int), pa->fd));
+	return (write(pa->fd, "%", 1));
 }
 
-int	ft_process(const char *str, va_list *params)
+int	ft_process(t_params *pa)
 {
-	size_t	i;
 	size_t	len;
 	size_t	temp_len;
 	size_t	err;
 
-	i = -1;
 	len = 0;
 	err = 0;
-	while (str[++i])
+	while (pa->str[++(pa->i)])
 	{
-		if (str[i] == '%')
+		if (pa->str[pa->i] == '%')
 		{
-			i++;
-			temp_len = do_write(str, &i, params);
+			(pa->i)++;
+			temp_len = do_write(pa);
 			if (!temp_len)
 				err = 1;
 			len += temp_len;
 		}
 		else
-			len += write(g_fd, &str[i], 1);
+			len += write(pa->fd, &(pa->str[pa->i]), 1);
 	}
-	va_end(*params);
+	va_end(pa->args);
+	free(pa);
 	if (err)
 		return (-1);
 	return (len);

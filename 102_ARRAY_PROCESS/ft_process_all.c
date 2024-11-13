@@ -12,7 +12,7 @@
 
 #include "../ft_printf.h"
 
-int	ft_process_all_s(char **chain, char *sep)
+int	ft_process_all_s(char **chain, char *sep, int fd)
 {
 	int	i;
 	int	len;
@@ -21,14 +21,14 @@ int	ft_process_all_s(char **chain, char *sep)
 	len = 0;
 	while (chain[++i])
 	{
-		len += ft_write_s(chain[i]);
+		len += ft_write_s(chain[i], fd);
 		if (chain[i + 1] && sep)
-			len += ft_write_s(sep);
+			len += ft_write_s(sep, fd);
 	}
 	return (len);
 }
 
-int	ft_process_all_d(int *array, char *sep)
+int	ft_process_all_d(int *array, char *sep, int fd)
 {
 	int	i;
 	int	len;
@@ -37,14 +37,14 @@ int	ft_process_all_d(int *array, char *sep)
 	len = 0;
 	while (array[++i])
 	{
-		len += ft_write_d(array[i]);
+		len += ft_write_d(array[i], fd);
 		if (array[i + 1] && sep)
-			len += ft_write_s(sep);
+			len += ft_write_s(sep, fd);
 	}
 	return (len);
 }
 
-int	ft_process_all_u(unsigned int *array, char *sep)
+int	ft_process_all_u(unsigned int *array, char *sep, int fd)
 {
 	int	i;
 	int	len;
@@ -53,14 +53,14 @@ int	ft_process_all_u(unsigned int *array, char *sep)
 	len = 0;
 	while (array[++i])
 	{
-		len += ft_write_u(array[i]);
+		len += ft_write_u(array[i], fd);
 		if (array[i + 1] && sep)
-			len += ft_write_s(sep);
+			len += ft_write_s(sep, fd);
 	}
 	return (len);
 }
 
-int	ft_process_all_p(unsigned long *ptr, char *sep)
+int	ft_process_all_p(unsigned long *ptr, char *sep, int fd)
 {
 	int	i;
 	int	len;
@@ -69,9 +69,9 @@ int	ft_process_all_p(unsigned long *ptr, char *sep)
 	len = 0;
 	while (ptr[++i])
 	{
-		len += ft_write_p(ptr[i]);
+		len += ft_write_p(ptr[i], fd);
 		if (ptr[i + 1] && sep)
-			len += ft_write_s(sep);
+			len += ft_write_s(sep, fd);
 	}
 	return (len);
 }

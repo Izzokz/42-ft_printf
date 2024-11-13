@@ -12,8 +12,6 @@
 
 #include "../ft_printf.h"
 
-static int	g_fd; // Read Only
-
 /*
 This function works like a converter from an alnum character
 to an integer if <type> == 'c', acts like isdigit if
@@ -43,44 +41,45 @@ static int	ft_conv(const char type, const char c)
 	return (conv);
 }
 
-static int	from_base(const char *str, size_t *i)
+static int	from_base(t_params *pa)
 {
 	size_t	j;
 	int		base;
 
 	base = 0;
-	j = *i;
-	if (str[++j] != '[')
+	j = pa->i;
+	if (pa->str[++j] != '[')
 		return (-1);
-	while (str[++j] && str[j] != ']' && ft_conv('n', str[j]))
+	while (pa->str[++j] && pa->str[j] != ']' && ft_conv('n', pa->str[j]))
 		;
-	if (str[j] != ']' || j > *i + 4 || j < *i + 3)
+	if (pa->str[j] != ']' || j > pa->i + 4 || j < pa->i + 3)
 		return (-1);
-	*i += 2;
-	while (*i < j)
+	pa->i += 2;
+	while (pa->i < j)
 	{
-		base = (base * 10) + (str[*i] - '0');
-		*i += 1;
+		base = (base * 10) + (pa->str[pa->i] - '0');
+		(pa->i)++;
 	}
 	return (base);
 }
 
-static int	base_after_b(const char *s, size_t *i)
+static int	base_after_b(t_params *pa)
 {
 	size_t	j;
 	int		base;
 
 	base = 0;
-	j = *i;
-	if (ft_strlen(s) > j + 2 && ft_conv('n', s[j +1]) && ft_conv('n', s[j +2]))
+	j = pa->i;
+	if (ft_strlen(pa->str) > j + 2 && ft_conv('n', pa->str[j + 1])
+		&& ft_conv('n', pa->str[j + 2]))
 	{
-		base = 10 * (s[j + 1] - '0') + s[j + 2] - '0';
-		*i += 2;
+		base = 10 * (pa->str[j + 1] - '0') + pa->str[j + 2] - '0';
+		pa->i += 2;
 	}
-	else if (ft_strlen(s) > j + 1 && ft_conv('n', s[j + 1]))
+	else if (ft_strlen(pa->str) > j + 1 && ft_conv('n', pa->str[j + 1]))
 	{
-		base = s[j + 1] - '0';
-		*i += 1;
+		base = pa->str[j + 1] - '0';
+		(pa->i)++;
 	}
 	return (base);
 }
@@ -111,7 +110,7 @@ static int	ft_getdec(const char *str, int base)
 If the user does not use ft_printf in a good way
 the result may differ
 */
-int	ft_write_b(va_list *params, const char *str, size_t *i)
+int	ft_write_b(t_params *pa)
 {
 	size_t	len;
 	char	*p_str;
@@ -119,23 +118,23 @@ int	ft_write_b(va_list *params, const char *str, size_t *i)
 	int		from;
 	int		base;
 
-	c = str[*i];
-	from = from_base(str, i);
-	base = base_after_b(str, i);
+	c = pa->str[pa->i];
+	from = from_base(pa);
+	base = base_after_b(pa);
 	p_str = NULL;
 	len = 0;
 	if (from != -1 && (from >= 2 && from <= 36))
-		from = ft_getdec(va_arg(*params, const char *), from);
+		from = ft_getdec(va_arg(*(pa->args), const char *), from);
 	else
-		from = va_arg(*params, unsigned long);
+		from = va_arg(*(pa->args), unsigned long);
 	if (base && (base >= 2 && base <= 36))
 		p_str = ft_getbase(from, base, c == 'B');
 	if (p_str)
 	{
-		ft_putstr_fd(p_str, g_fd);
+		ft_putstr_fd(p_str, pa->fd);
 		len = ft_strlen(p_str);
 		free(p_str);
-		str = NULL;
+		p_str = NULL;
 	}
 	return (len);
 }

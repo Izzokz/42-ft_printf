@@ -12,20 +12,20 @@
 
 #include "../ft_printf.h"
 
-static int	call_all(void *ptr, char c, char *sep)
+static int	call_all(void *ptr, t_params *pa, char *sep)
 {
-	if (c == 'd' || c == 'i')
-		return (ft_process_all_d((int *)ptr, sep));
-	if (c == 's')
-		return (ft_process_all_s((char **)ptr, sep));
-	if (c == 'u')
-		return (ft_process_all_u((unsigned int *)ptr, sep));
-	if (c == 'p')
-		return (ft_process_all_p((unsigned long *)ptr, sep));
+	if (pa->str[pa->i] == 'd' || pa->str[pa->i] == 'i')
+		return (ft_process_all_d((int *)ptr, sep, pa->fd));
+	if (pa->str[pa->i] == 's')
+		return (ft_process_all_s((char **)ptr, sep, pa->fd));
+	if (pa->str[pa->i] == 'u')
+		return (ft_process_all_u((unsigned int *)ptr, sep, pa->fd));
+	if (pa->str[pa->i] == 'p')
+		return (ft_process_all_p((unsigned long *)ptr, sep, pa->fd));
 	return (0);
 }
 
-static int	call_of_duty(void **origin, int depth, char c, char *sep)
+static int	call_of_duty(void **origin, int depth, t_params *pa, char *sep)
 {
 	int		j;
 	int		len;
@@ -38,52 +38,52 @@ static int	call_of_duty(void **origin, int depth, char c, char *sep)
 	{
 		while (origin[++j] != NULL)
 		{
-			len += call_of_duty(origin[j], depth - 1, c, sep);
+			len += call_of_duty(origin[j], depth - 1, pa, sep);
 			if (origin[j + 1] != NULL && sep)
-				len += ft_write_s(sep);
+				len += ft_write_s(sep, pa->fd);
 		}
 	}
 	else
-		len += call_all(origin, c, sep);
+		len += call_all(origin, pa, sep);
 	return (len);
 }
 
-static char	*get_sep(const char *str, size_t *i)
+static char	*get_sep(t_params *pa)
 {
 	size_t	j;
 	size_t	k;
 	char	*sep;
 
 	sep = NULL;
-	j = *i;
-	if (str[j] != '[')
+	j = pa->i;
+	if (pa->str[j] != '[')
 		return (sep);
-	while (str[++j] && str[j] != ']')
+	while (pa->str[++j] && pa->str[j] != ']')
 		;
-	if (str[j] != ']' || str[j - 1] == '[')
+	if (pa->str[j] != ']' || pa->str[j - 1] == '[')
 		return (NULL);
-	*i += 1;
-	sep = ft_calloc(j - *i + 1, sizeof(char));
+	(pa->i)++;
+	sep = ft_calloc(j - pa->i + 1, sizeof(char));
 	k = 0;
-	while (*i < j)
+	while (pa->i < j)
 	{
-		sep[k] = str[*i];
-		*i += 1;
+		sep[k] = pa->str[pa->i];
+		(pa->i)++;
 		k++;
 	}
-	*i += 1;
+	(pa->i)++;
 	return (sep);
 }
 
-static int	get_rdepth(const char *str, size_t *i)
+static int	get_rdepth(t_params *pa)
 {
-	++(*i);
-	if (str[*i] == '.')
+	(pa->i)++;
+	if (pa->str[pa->i] == '.')
 	{
-		if (str[*i + 1] >= '0' && str[*i + 1] <= '9')
+		if (pa->str[pa->i + 1] >= '0' && pa->str[pa->i + 1] <= '9')
 		{
-			*i += 2;
-			return (str[*i - 1] - '0' + 1);
+			pa->i += 2;
+			return (pa->str[pa->i - 1] - '0' + 1);
 		}
 		else
 			return (-1);
@@ -91,7 +91,7 @@ static int	get_rdepth(const char *str, size_t *i)
 	return (0);
 }
 
-int	ft_write_all(va_list *params, const char *str, size_t *i)
+int	ft_write_all(t_params *pa)
 {
 	size_t	len;
 	char	*sep;
@@ -99,17 +99,17 @@ int	ft_write_all(va_list *params, const char *str, size_t *i)
 	void	*ptr;
 
 	len = 0;
-	recursive = get_rdepth(str, i);
+	recursive = get_rdepth(pa);
 	if (recursive == -1)
 		return (0);
-	sep = get_sep(str, i);
-	ptr = va_arg(*params, void *);
+	sep = get_sep(pa);
+	ptr = va_arg(pa->args, void *);
 	if (!ptr)
 		return (0);
 	if (recursive)
-		len += call_of_duty(ptr, recursive - 1, str[*i], sep);
+		len += call_of_duty(ptr, recursive - 1, pa, sep);
 	else
-		len += call_all(ptr, str[*i], sep);
+		len += call_all(ptr, pa, sep);
 	if (sep)
 	{
 		free(sep);
