@@ -28,7 +28,7 @@ CCA = cc -Wall -Wextra -Werror -g3
 
 TEST = ft_printf.test
 TESTMAIN = main.c
-TESTMAINO = $(TESTMAIN:.c=.o)
+TESTMAINO = $(OBJDIR)$(TESTMAIN:.c=.o)
 
 all: $(NAME)
 
@@ -51,6 +51,9 @@ $(OBJDIR)%.o: $(WRITEDIR)%.c | $(OBJDIR)
 	$(CCA) -o $@ -c $<
 
 $(OBJDIR)%.o: $(ARRAYDIR)%.c | $(OBJDIR)
+	$(CCA) -o $@ -c $<
+
+$(TESTMAINO): $(TESTMAIN)
 	$(CCA) -o $@ -c $<
 
 clean:
