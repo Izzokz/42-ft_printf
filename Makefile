@@ -21,7 +21,7 @@ WRITESRC = $(WRITEDIR)ft_write_d.c \
 ARRAYSRC = $(ARRAYDIR)ft_write_all.c \
 	$(ARRAYDIR)ft_process_all.c
 
-OBJDIR = obj/
+OBJDIR = 666_OBJ/
 OBJ = $(patsubst %.c,$(OBJDIR)%.o,$(notdir $(MAINSRC) $(UTILSSRC) $(WRITESRC) $(ARRAYSRC)))
 
 CCA = cc -Wall -Wextra -Werror -g3
