@@ -124,9 +124,9 @@ int	ft_write_b(t_params *pa)
 	p_str = NULL;
 	len = 0;
 	if (from != -1 && (from >= 2 && from <= 36))
-		from = ft_getdec(va_arg(*(pa->args), const char *), from);
+		from = ft_getdec(va_arg(pa->args, const char *), from);
 	else
-		from = va_arg(*(pa->args), unsigned long);
+		from = va_arg(pa->args, unsigned long);
 	if (base && (base >= 2 && base <= 36))
 		p_str = ft_getbase(from, base, c == 'B');
 	if (p_str)

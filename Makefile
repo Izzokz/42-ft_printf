@@ -38,6 +38,9 @@ $(NAME): $(OBJ)
 test: $(NAME) $(TESTMAINO)
 		$(CCA) -o $(TEST) $(TESTMAINO) $(OBJ)
 
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
 $(OBJDIR)%.o: $(MAINDIR)%.c | $(OBJDIR)
 	$(CCA) -o $@ -c $<
 
