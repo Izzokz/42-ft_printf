@@ -18,10 +18,13 @@ static int	is_flag(const char *flag, t_params *pa)
 	size_t	init;
 
 	init = pa->i;
-	--(pa->i);
-	k = -1;
-	while (pa->str[++(pa->i)] == flag[++k])
-		;
+	k = 0;
+	while (pa->str[pa->i] && flag[k]
+		&& pa->str[pa->i] == flag[k])
+	{
+		(pa->i)++;
+		k++;
+	}
 	if (!flag[k] && pa->str[--(pa->i)] == flag[k - 1])
 		return (1);
 	pa->i = init;
