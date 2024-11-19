@@ -18,8 +18,6 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <errno.h>
-# include <stdio.h>
-# include <limits.h>
 # include "010_GNLXIO/gnlxio.h"
 
 typedef struct s_params
