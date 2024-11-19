@@ -2,7 +2,16 @@
 
 ## Main Functions
 - ```int  ft_printf(char *str, ...);```
+  - Acts like `printf()` with more format specifiers
 - ```int  ft_printf_fd(char *str, int fd, ...);```
+  - Acts like `dprintf()` with more format specifiers
+- ```int  ft_printf_err(char *msg, int fd, ...);```
+  - Acts like `perror()` with format specifiers and a mandatory fd.
+  - NOTE : `msg` can be NULL.
+  - Examples :
+    - ft_printf_err(NULL, 0) >>> "Remote I/O error"
+    - ft_printf_err("err", 0) >>> "err: Socket type not supported"
+    - ft_printf_err("errid[%d]", 0, i) >>> "errid[778]: Success"
 
 ## Formats && Flags
 |Format|Data Type|Desc|
@@ -23,7 +32,7 @@
 - Basic Usage :
   - ```%b<base>``` will print an ```unsigned long int``` to another base with lowercase
   - ```%B<base>``` will print an ```unsigned long int``` to another base with uppercase
-  - **NOTE : base cannot be lower than 2 nor higher than 36**
+  - **NOTE : `base` cannot be lower than 2 nor higher than 36**
 - Flag : If a specific base is entered between '[' and ']', it will print from a ```char *``` to another base
   - **NOTE : it won't work if there is something else than a number between 2 and 36 in the dedicated space**
 - Examples :
@@ -60,7 +69,7 @@
 
 - Behaviour : After ```%*```, means that it will print every variable of every array contained in the source array, recursively.
 - Parameter : As the C language can't go through pointers recursively without SIGSEGV, it needs a depth parameter as its light in the dark cave of dereferencing.
- - **NOTE : depth can't be 0 or higher than 9**
+ - **NOTE : `depth` can't be 0 or higher than 9**
  - **NOTE : every array has to be NULL terminated**
  - **NOTE : using it with pointers of arrays will result in Conditional Jump**
 
