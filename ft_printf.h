@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdint.h>
+# include <errno.h>
+# include "010_GNLXIO/gnlxio.h"
 
 typedef struct s_params
 {
@@ -50,5 +52,6 @@ int		ft_process(t_params *pa);
 int		ft_write_all(t_params *pa);
 int		ft_printf_fd(const char *str, int fd, ...);
 int		ft_printf(const char *str, ...);
+int		ft_printf_err(const char *msg, int fd, ...);
 
 #endif

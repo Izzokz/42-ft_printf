@@ -23,6 +23,7 @@ ARRAYSRC = $(ARRAYDIR)ft_write_all.c \
 
 OBJDIR = 666_OBJ/
 OBJ = $(patsubst %.c,$(OBJDIR)%.o,$(notdir $(MAINSRC) $(UTILSSRC) $(WRITESRC) $(ARRAYSRC)))
+GNLXIO = 010_GNLXIO/gnlxio.a
 
 CCA = cc -Wall -Wextra -Werror -g3
 
@@ -33,15 +34,20 @@ TESTMAINO = $(OBJDIR)$(TESTMAIN:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-		ar rc $(NAME) $(OBJ)
+	ar x $(GNLXIO)
+	ar rc $(NAME) $(OBJ) *.o
+	rm -f *.o
 
 test: $(NAME) $(TESTMAINO)
-		$(CCA) -o $(TEST) $(TESTMAINO) $(OBJ)
+	$(CCA) -o $(TEST) $(TESTMAINO) $(NAME)
+
+$(GNLXIO):
+	$(MAKE) -C 010_GNLXIO/
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
-$(OBJDIR)%.o: $(MAINDIR)%.c | $(OBJDIR)
+$(OBJDIR)%.o: $(MAINDIR)%.c | $(OBJDIR) $(GNLXIO)
 	$(CCA) -o $@ -c $<
 
 $(OBJDIR)%.o: $(UTILDIR)%.c | $(OBJDIR)
@@ -57,10 +63,12 @@ $(TESTMAINO): $(TESTMAIN)
 	$(CCA) -o $@ -c $<
 
 clean:
-		rm -f $(OBJ) $(TESTMAINO)
+	$(MAKE) clean -C 010_GNLXIO/
+	rm -f $(OBJ) $(TESTMAINO)
 
 fclean: clean
-		rm -f $(NAME) $(TEST)
+	$(MAKE) fclean -C 010_GNLXIO/
+	rm -f $(NAME) $(TEST)
 
 re: fclean all
 
