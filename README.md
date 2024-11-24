@@ -59,6 +59,7 @@
     
     ft_printf("%B36", INT_MAX);
     >>> "ZIK0ZJ"
+    
     ft_printf("%b[2]36", "1111111111111111111111111111111");
     >>> "zik0zj"
     ```
@@ -137,15 +138,15 @@
 ```%*```
 
 - Behaviour : Prints every variable in an array.
-- **NOTE : the array must be NULL terminated.**
+  - **NOTE : the array must be NULL terminated.**
 #### Special Flag of Special Flag
 ```.```
 
 - Behaviour : After ```%*```, means that it will print every variable of every array contained in the source array, recursively.
 - Parameter : As the C language can't go through pointers recursively without SIGSEGV, it needs a depth parameter as its light in the dark cave of dereferencing.
- - **NOTE : `depth` can't be 0 or higher than 9.**
- - **NOTE : every array has to be NULL terminated.**
- - **NOTE : using it with pointers of arrays will result in Conditional Jump.**
+  - **NOTE : `depth` can't be 0 or higher than 9.**
+  - **NOTE : every array has to be NULL terminated.**
+  - **NOTE : using it with pointers of arrays will result in Segfault.**
 
 ```[separator]```
 
@@ -163,8 +164,8 @@
     ft_printf("%*[ ]s", {"My", "name", "is", "Izzokz", NULL});
     >>> "My name is Izzokz"
     
-    ft_printf("%*.4[::]i", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL});
-    >>> "1::7::2::6::3::5"
+    ft_printf("%*.4[:[>:]i", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL});
+    >>> "1:[>:7:[>:2:[>:6:[>:3:[>:5"
     
     ft_printf("%*.3[, ]p", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL});
     >>> "0xfff, 0xaaa, 0x111"
@@ -174,5 +175,11 @@
     ft_printf("%*.3[, ]p", {{{{1, 7}, {2, 6}}, {{3, 5}}}}); // No NULL termination
     
     ft_printf("%*.2[\n]i", &array); // Expected array, pointer given instead
+
+    ft_printf("%*.3[]p", {{{{1, 7, 0}, {2, 6, 0}, NULL}, {{3, 5, 0}, NULL}, NULL}, NULL}); // Empty separator slot
+
+    ft_printf("%*[normal sep until this -> []i", {1, 2, 3, 4, 5, '\0'}); // Last character of the separator is '['
+
+    ft_printf("%*.3[ ]s", {"My", "name", "is", "Izzokz", NULL}); // Invalid depth : too high -> SIGSEGV
     ```
 - **NOTE : I made it easier in that way. If your pointer looks like this ```int ***arr``` or ```unsigned int **arr```, you will use or ```%*.3i``` or ```%*.2u```. With ```%s``` or ```%p```, you will decrease the parameter of the flag of flag ```.``` by one (```%*.4s``` for ```char *****str``` or ```%*.2p``` for ```unsigned int ***arr```).**
