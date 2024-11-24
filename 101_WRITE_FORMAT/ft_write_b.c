@@ -91,6 +91,8 @@ static int	ft_getdec(const char *str, int base)
 	int				c_to_i;
 	int				weight;
 
+	if (!str)
+		return (0);
 	len = ft_strlen(str);
 	dec = 0;
 	weight = -1;
