@@ -69,8 +69,8 @@ $(NAME): $(OBJ)
 	@rm -f *.o
 	@printf "\n\033[31m\033[1mft_printf: \033[1;97mBuild Complete !\033[0m\n"
 
-test: $(NAME) $(TESTMAINO)
-	$(CCA) -o $(TEST) $(TESTMAINO) $(NAME)
+test: $(TESTMAINO) $(NAME)
+	@$(CCA) -o $(TEST) $(TESTMAINO) $(NAME)
 
 $(GNLXIO):
 	@$(MAKE) -C 010_GNLXIO/
@@ -97,7 +97,7 @@ $(OBJDIR)%.o: $(ARRAYDIR)%.c | $(OBJDIR)
 
 $(TESTMAINO): $(TESTMAIN)
 	@$(CCA) -o $@ -c $<
-	@printf "\n\033[31m\033[1mft_printf: \033[1;37mMain Compiled !\033[0m\n"
+	@printf "\033[31m\033[1mft_printf: \033[1;37mMain Compiled !\033[0m\n"
 
 clean:
 	@$(MAKE) clean -C 010_GNLXIO/
