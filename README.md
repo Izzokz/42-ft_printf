@@ -23,7 +23,6 @@
 
 ## Makefile
 - It is easy to try the library with ```make test```, it just needs a `main.c`.
-- Everytime ```make``` is called, it will copy `.errmsg` in `/var/tmp/` or try to for `ft_printf_err()` to work.
 
 ## Formats && Flags
 |Format|Data Type|Desc|
