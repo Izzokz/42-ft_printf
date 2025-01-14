@@ -65,7 +65,7 @@ static char	*get_sep(t_params *pa)
 	(pa->i)++;
 	sep = ft_calloc(j - pa->i + 1, sizeof(char));
 	if (!sep)
-		return (NULL)
+		return (NULL);
 	k = 0;
 	while (pa->i < j)
 	{
