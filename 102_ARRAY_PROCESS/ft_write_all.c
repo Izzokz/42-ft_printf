@@ -64,6 +64,8 @@ static char	*get_sep(t_params *pa)
 		return (NULL);
 	(pa->i)++;
 	sep = ft_calloc(j - pa->i + 1, sizeof(char));
+	if (!sep)
+		return (NULL)
 	k = 0;
 	while (pa->i < j)
 	{
@@ -102,10 +104,10 @@ int	ft_write_all(t_params *pa)
 	recursive = get_rdepth(pa);
 	if (recursive == -1)
 		return (0);
-	sep = get_sep(pa);
 	ptr = va_arg(pa->args, void *);
 	if (!ptr)
 		return (0);
+	sep = get_sep(pa);
 	if (recursive)
 		len += call_of_duty(ptr, recursive - 1, pa, sep);
 	else
