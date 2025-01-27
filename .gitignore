@@ -4,3 +4,4 @@ ft_printf.test
 *.o
 *.d
 *.txt
+libftprintf.a
