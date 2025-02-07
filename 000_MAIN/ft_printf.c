@@ -66,6 +66,18 @@ static int	ft_strerr(int errid, int fd)
 }
 
 /*
+If one of the returns is an error (-1), it will set <a> to -1.
+Else it will add <b> to <a>.
+*/
+static void	fix_return(int *a, int b)
+{
+	if (*a == -1 || b == -1)
+		*a = -1;
+	else
+		(*a) += b;
+}
+
+/*
 Parameters:
 	- const char *msg;
 	- int fd;
@@ -83,20 +95,20 @@ Examples:
 int	ft_printf_err(const char *msg, int fd, ...)
 {
 	t_params	pa;
-	int			len;
+	t_ints		i;
 
 	pa.str = msg;
 	pa.fd = fd;
 	pa.i = -1;
 	va_start(pa.args, fd);
-	len = 0;
 	if (msg)
 	{
-		len += ft_process(&pa);
-		len += write(fd, ": ", 2);
+		i.len = ft_process(&pa);
+		i.tmp = write(fd, ": ", 2);
+		fix_return(&i.len, i.tmp);
 	}
-	else
-		va_end(pa.args);
-	len += ft_strerr(errno, fd);
-	return (len);
+	va_end(pa.args);
+	i.tmp = ft_strerr(errno, fd);
+	fix_return(&i.len, i.tmp);
+	return (i.len);
 }
