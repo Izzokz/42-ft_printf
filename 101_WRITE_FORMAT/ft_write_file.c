@@ -30,9 +30,9 @@ static int	get_lineno(t_params *pa)
 	}
 	while (pa->str[++j] && pa->str[j] != ']' && ft_conv('n', pa->str[j]))
 		;
-	if (pa->str[j] != ']' || j < pa->i + 3)
+	if (pa->str[j] != ']' || pa->str[j - 1] == '-' || j < pa->i + 3)
 		return (0);
-	pa->i += 2;
+	pa->i += 2 + (sign == -1);
 	while (pa->i < j)
 	{
 		lineno = (lineno * 10) + (pa->str[pa->i] - '0');
