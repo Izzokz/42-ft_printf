@@ -13,6 +13,30 @@
 #include "../ft_printf.h"
 #include "../errmsg.h"
 
+static char	*ft_vgetf(const char *format, va_list args)
+{
+	t_params	*pa;
+	int			len;
+	char		*str;
+
+	if (!format)
+		return (NULL);
+	pa = malloc(sizeof(t_params));
+	if (!pa)
+		return (NULL);
+	*pa = (t_params){.i = -1, .str = format, .out = NULL};
+	va_copy(pa->args, args);
+	ft_set_pa(pa);
+	len = ft_process(pa);
+	va_end(pa->args);
+	if (len == -2)
+		len = -1;
+	str = pa->out;
+	free(pa);
+	last_getf_len(len);
+	return (str);
+}
+
 /*
 Parameters:
 	- const char *str;
@@ -24,17 +48,21 @@ Behaviour:
 Returns:
 	Number of printed characters
 */
-int	ft_printf_fd(const char *str, int fd, ...)
+int	ft_printf_fd(const char *format, int fd, ...)
 {
-	t_params	pa;
+	va_list	args;
+	char	*str;
 
-	if (!str || fd < 0)
+	if (!format || fd < 0)
 		return (-1);
-	pa.str = str;
-	pa.fd = fd;
-	pa.i = -1;
-	va_start(pa.args, fd);
-	return (ft_process(&pa));
+	va_start(args, fd);
+	str = ft_vgetf(format, args);
+	va_end(args);
+	if (!str)
+		return (-1);
+	write(fd, str, ft_strlen(str));
+	free(str);
+	return (last_getf_len(LGL_GET));
 }
 
 /*
@@ -47,34 +75,45 @@ Behaviour:
 Returns:
 	Number of printed characters
 */
-int	ft_printf(const char *str, ...)
+int	ft_printf(const char *format, ...)
 {
-	t_params	pa;
+	va_list	args;
+	char	*str;
 
+	if (!format)
+		return (-1);
+	va_start(args, format);
+	str = ft_vgetf(format, args);
+	va_end(args);
 	if (!str)
 		return (-1);
-	pa.str = str;
-	pa.fd = 1;
-	pa.i = -1;
-	va_start(pa.args, str);
-	return (ft_process(&pa));
+	write(1, str, ft_strlen(str));
+	free(str);
+	return (last_getf_len(LGL_GET));
 }
 
-static int	ft_strerr(int errid, int fd)
+static int	ft_perr_add(char **pstr1, char **pstr2)
 {
-	return (ft_printf_fd("%s\n", fd, g_errmsg[errid]));
-}
+	t_ints	i;
 
-/*
-If one of the returns is an error (-1), it will set <a> to -1.
-Else it will add <b> to <a>.
-*/
-static void	fix_return(int *a, int b)
-{
-	if (*a == -1 || b == -1)
-		*a = -1;
-	else
-		(*a) += b;
+	if (!(*pstr1) || !(*pstr2))
+	{
+		free(*pstr1);
+		free(*pstr2);
+		return (-1);
+	}
+	i.len1 = ft_strlen(*pstr1);
+	i.len2 = ft_strlen(*pstr2);
+	*pstr1 = gnlxio_ft_strjoinfree(pstr1, pstr2);
+	if (!(*pstr1))
+		return (-1);
+	i.len = ft_strlen(*pstr1);
+	if (i.len != i.len1 + i.len2)
+	{
+		free(*pstr1);
+		return (-1);
+	}
+	return (i.len);
 }
 
 /*
@@ -94,21 +133,28 @@ Examples:
 */
 int	ft_printf_err(const char *msg, int fd, ...)
 {
-	t_params	pa;
-	t_ints		i;
+	va_list	args;
+	char	*str;
+	char	err;
+	int		len;
 
-	pa.str = msg;
-	pa.fd = fd;
-	pa.i = -1;
-	va_start(pa.args, fd);
+	err = 0;
 	if (msg)
 	{
-		i.len = ft_process(&pa);
-		i.tmp = write(fd, ": ", 2);
-		fix_return(&i.len, i.tmp);
+		va_start(args, fd);
+		str = ft_vgetf(msg, args);
+		va_end(args);
+		err = last_getf_len(LGL_GET) == -1;
+		if (ft_perr_add(&str, &(char *){ft_strdup(": ")}) < 0)
+			return (-1);
 	}
-	va_end(pa.args);
-	i.tmp = ft_strerr(errno, fd);
-	fix_return(&i.len, i.tmp);
-	return (i.len);
+	if (ft_perr_add(&str, &(char *){ft_strdup(g_errmsg[errno])}) < 0)
+		return (-1);
+	err += last_getf_len(LGL_GET) == -1;
+	len = ft_strlen(str);
+	write(fd, str, len);
+	free(str);
+	if (err)
+		return (-1);
+	return (len);
 }

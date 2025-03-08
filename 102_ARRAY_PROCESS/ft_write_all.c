@@ -15,13 +15,13 @@
 static int	call_all(void *ptr, t_params *pa, char *sep)
 {
 	if (pa->str[pa->i] == 'd' || pa->str[pa->i] == 'i')
-		return (ft_process_all_d((int *)ptr, sep, pa->fd));
+		return (ft_process_all_d((int *)ptr, sep));
 	if (pa->str[pa->i] == 's')
-		return (ft_process_all_s((char **)ptr, sep, pa->fd));
+		return (ft_process_all_s((char **)ptr, sep));
 	if (pa->str[pa->i] == 'u')
-		return (ft_process_all_u((unsigned int *)ptr, sep, pa->fd));
+		return (ft_process_all_u((unsigned int *)ptr, sep));
 	if (pa->str[pa->i] == 'p')
-		return (ft_process_all_p((unsigned long *)ptr, sep, pa->fd));
+		return (ft_process_all_p((unsigned long *)ptr, sep));
 	return (0);
 }
 
@@ -40,7 +40,7 @@ static int	call_of_duty(void **origin, int depth, t_params *pa, char *sep)
 		{
 			len += call_of_duty(origin[j], depth - 1, pa, sep);
 			if (origin[j + 1] != NULL && sep)
-				len += ft_write_s(sep, pa->fd);
+				len += ft_write_s(sep);
 		}
 	}
 	else
@@ -113,9 +113,6 @@ int	ft_write_all(t_params *pa)
 	else
 		len += call_all(ptr, pa, sep);
 	if (sep)
-	{
 		free(sep);
-		sep = NULL;
-	}
 	return (len);
 }

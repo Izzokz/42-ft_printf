@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_out_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kzhen-cl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 15:13:07 by kzhen-cl          #+#    #+#             */
-/*   Updated: 2024/10/14 15:13:08 by kzhen-cl         ###   ########.fr       */
+/*   Created: 2025/03/06 16:32:03 by kzhen-cl          #+#    #+#             */
+/*   Updated: 2025/03/06 16:32:04 by kzhen-cl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
+int	ft_out_add(char **pstr)
 {
-	write(fd, &c, 1);
+	t_params	*pa;
+	t_ints		i;
+
+	if (!(*pstr))
+		return (-2);
+	pa = ft_get_pa();
+	if (pa->out)
+		i.len1 = ft_strlen(pa->out);
+	else
+		i.len1 = 0;
+	i.len2 = ft_strlen(*pstr);
+	pa->out = gnlxio_ft_strjoinfree(&(pa->out), pstr);
+	if (!(pa->out))
+		return (-2);
+	i.len = ft_strlen(pa->out);
+	if (i.len1 + i.len2 != i.len)
+		return (-2);
+	return (i.len);
 }

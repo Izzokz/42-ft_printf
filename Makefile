@@ -6,13 +6,13 @@ WRITEDIR = 101_WRITE_FORMAT/
 ARRAYDIR = 102_ARRAY_PROCESS/
 
 MAINSRC = $(MAINDIR)ft_process.c \
+	$(MAINDIR)ft_getf.c \
 	$(MAINDIR)ft_printf.c
 UTILSSRC = $(UTILDIR)ft_getbase.c \
 	$(UTILDIR)ft_calloc.c \
-	$(UTILDIR)ft_putchar_fd.c \
-	$(UTILDIR)ft_putstr_fd.c \
 	$(UTILDIR)ft_strlen.c \
 	$(UTILDIR)ft_itoa.c \
+	$(UTILDIR)ft_out_add.c \
 	$(UTILDIR)ft_strdup.c \
 	$(UTILDIR)ft_pow.c
 WRITESRC = $(WRITEDIR)ft_write_d.c \

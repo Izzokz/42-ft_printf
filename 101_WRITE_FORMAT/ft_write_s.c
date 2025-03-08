@@ -12,19 +12,21 @@
 
 #include "../ft_printf.h"
 
-int	ft_write_c(char value, int fd)
+int	ft_write_c(char value)
 {
-	ft_putchar_fd(value, fd);
-	return (1);
+	char	*str;
+
+	str = malloc(2);
+	if (!str)
+		return (-2);
+	str[0] = value;
+	str[1] = 0;
+	return (ft_out_add(&str));
 }
 
-int	ft_write_s(char *value, int fd)
+int	ft_write_s(char *value)
 {
 	if (!value)
-	{
-		ft_putstr_fd("(null)", fd);
-		return (6);
-	}
-	ft_putstr_fd(value, fd);
-	return (ft_strlen(value));
+		return (ft_out_add(&(char *){ft_strdup("(null)")}));
+	return (ft_out_add(&(char *){ft_strdup(value)}));
 }

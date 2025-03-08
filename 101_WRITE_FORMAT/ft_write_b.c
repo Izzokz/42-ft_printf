@@ -86,10 +86,10 @@ static int	base_after_b(t_params *pa)
 
 static int	ft_getdec(const char *str, int base)
 {
-	unsigned long	dec;
-	int				len;
-	int				c_to_i;
-	int				weight;
+	int	dec;
+	int	len;
+	int	c_to_i;
+	int	weight;
 
 	if (!str)
 		return (0);
@@ -107,15 +107,11 @@ static int	ft_getdec(const char *str, int base)
 }
 
 /*
-<str> is the first parameter of ft_printf()
-<p_str> is the string to print
 If the user does not use ft_printf in a good way
 the result may differ
 */
 int	ft_write_b(t_params *pa)
 {
-	size_t	len;
-	char	*p_str;
 	char	c;
 	int		from;
 	int		base;
@@ -123,20 +119,11 @@ int	ft_write_b(t_params *pa)
 	c = pa->str[pa->i];
 	from = from_base(pa);
 	base = base_after_b(pa);
-	p_str = NULL;
-	len = 0;
-	if (from != -1 && (from >= 2 && from <= 36))
+	if (from >= 2 && from <= 36)
 		from = ft_getdec(va_arg(pa->args, const char *), from);
 	else
 		from = va_arg(pa->args, unsigned long);
-	if (base && (base >= 2 && base <= 36))
-		p_str = ft_getbase(from, base, c == 'B');
-	if (p_str)
-	{
-		ft_putstr_fd(p_str, pa->fd);
-		len = ft_strlen(p_str);
-		free(p_str);
-		p_str = NULL;
-	}
-	return (len);
+	if (base >= 2 && base <= 36)
+		return (ft_out_add(&(char *){ft_getbase(from, base, c == 'B')}));
+	return (-1);
 }

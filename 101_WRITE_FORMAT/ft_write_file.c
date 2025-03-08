@@ -44,44 +44,32 @@ static int	get_lineno(t_params *pa)
 static int	ft_write_from_name(t_params *pa)
 {
 	char	**rlines;
-	char	*rline;
 	int		lineno;
 	int		len;
 
 	lineno = get_lineno(pa);
 	if (!lineno && pa->str[pa->i + 1] == '[')
-		return (0);
+		return (-1);
 	else if (lineno)
-	{
-		rline = ft_get_line(va_arg(pa->args, const char *), lineno);
-		if (!rline)
-			return (0);
-		len = ft_write_s(rline, pa->fd);
-		free(rline);
-	}
+		return (ft_out_add(&(char *){ft_get_line(va_arg(pa->args,
+						const char *), lineno)}));
 	else
 	{
 		rlines = ft_readfile(va_arg(pa->args, const char *));
 		if (invalid_rlines_free(&rlines))
-			return (0);
-		len = ft_printf_fd("%*s", pa->fd, rlines);
+			return (-2);
+		len = ft_out_add(&(char *){ft_getf("%*s", rlines)});
+		if (len != -2 && last_getf_len(LGL_GET) == -1)
+			len = -1;
 		ft_free_rlines(&rlines);
 	}
 	return (len);
 }
 
-static int	ft_write_line(char **rlines, int lineno, t_params *pa)
+static int	ft_write_line(char **rlines, int lineno)
 {
-	char	*rline;
-	int		len;
-
 	ft_fix_lineno(&lineno, ft_rlines_len(rlines));
-	rline = ft_strdup(rlines[lineno - 1]);
-	if (!rline)
-		return (0);
-	len = ft_write_s(rline, pa->fd);
-	free(rline);
-	return (len);
+	return (ft_out_add(&(char *){ft_strdup(rlines[lineno - 1])}));
 }
 
 int	ft_write_file(t_params *pa)
@@ -100,11 +88,15 @@ int	ft_write_file(t_params *pa)
 		return (0);
 	lineno = get_lineno(pa);
 	if (!lineno && pa->str[pa->i + 1] == '[')
-		len = 0;
+		len = -1;
 	else if (lineno)
-		len = ft_write_line(rlines, lineno, pa);
+		len = ft_write_line(rlines, lineno);
 	else
-		len = ft_printf_fd("%*s", pa->fd, rlines);
+	{
+		len = ft_out_add(&(char *){ft_getf("%*s", rlines)});
+		if (len != -2 && last_getf_len(LGL_GET) == -1)
+			len = -1;
+	}
 	ft_free_rlines(&rlines);
 	return (len);
 }
