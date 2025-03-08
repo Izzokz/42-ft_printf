@@ -1,11 +1,15 @@
 # ft_printf
 
 ## Main Functions
-- ```int  ft_printf(char *str, ...);```
+- ```char  ft_getf(char *format, ...);```
+  - Base of `ft_printf()` and its variants.
+  - Returns a string without printing anything.
+  - Grants better atomicity for `ft_printf()` and its variants.
+- ```int   ft_printf(char *format, ...);```
   - Acts like `printf()` with more format specifiers
-- ```int  ft_printf_fd(char *str, int fd, ...);```
+- ```int   ft_printf_fd(char *format, int fd, ...);```
   - Acts like `dprintf()` with more format specifiers
-- ```int  ft_printf_err(char *msg, int fd, ...);```
+- ```int   ft_printf_err(char *msg, int fd, ...);```
   - Acts like `perror()` with format specifiers and a mandatory fd.
   - **NOTE : `msg` can be NULL.**
   - **NOTE : `fd` is mandatory because it will often be used for logs**
