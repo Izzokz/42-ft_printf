@@ -31,5 +31,5 @@ int	ft_out_add(char **pstr)
 	i.len = ft_strlen(pa->out);
 	if (i.len1 + i.len2 != i.len)
 		return (-2);
-	return (i.len);
+	return (i.len2);
 }

@@ -103,10 +103,10 @@ int	ft_write_all(t_params *pa)
 	len = 0;
 	recursive = get_rdepth(pa);
 	if (recursive == -1)
-		return (0);
+		return (-1);
 	ptr = va_arg(pa->args, void *);
 	if (!ptr)
-		return (0);
+		return (-1);
 	sep = get_sep(pa);
 	if (recursive)
 		len += call_of_duty(ptr, recursive - 1, pa, sep);
